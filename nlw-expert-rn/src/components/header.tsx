@@ -1,6 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'
 import colors from "tailwindcss/colors";
+import { Link, usePathname, useRouter } from "expo-router";
+import { useUserStore } from "@/stores/user-store";
 
 type HeaderProps = {
     title: string,
@@ -8,23 +10,45 @@ type HeaderProps = {
 }
 
 export function Header({ title, cartQuantityItems = 0 }: HeaderProps) {
+    const path = usePathname()
+    const userStore = useUserStore()
+    const user = userStore.user
+    const router = useRouter()
+    
     return (
         <View className="flex-row items-center border-b border-slate-700 pb-5 mx-5">
             <View className="flex-1">
-                <Image className="h-6 w-32" source={require('@/assets/logo.png')} />
+                <TouchableOpacity onPress={() => router.push('/')} activeOpacity={0.7}>
+                    <Image className="h-6 w-32" source={require('@/assets/logo.png')} />
+                </TouchableOpacity>
                 <Text className="text-white text-xl font-heading mt-2">{title}</Text>
             </View>
 
-            {
-                cartQuantityItems > 0 && (
-                    <TouchableOpacity className="relative" activeOpacity={0.7}>
-                    <View className="bg-lime-300 w-4 h-4 rounded-full items-center justify-center top-2 z-10 -right-3.5">
-                        <Text className="text-slate-900 font-bold text-xs">{cartQuantityItems}</Text>
-                    </View>
-                    <Feather name="shopping-bag" color={colors.white} size={24} />
-                </TouchableOpacity>
-                )
-            }
+            <View className="flex-row gap-4 items-center">
+                {path !== '/user' && (
+                    <Link href={'/user'} asChild>
+                        <TouchableOpacity className="relative" activeOpacity={0.7}>
+                            { (!user.name || !user.email || !user.phone || !user.address) && (
+                                <View className="bg-lime-300 w-4 h-4 rounded-full items-center justify-center -top-2 z-10 -right-1.5 absolute">
+                                    <Text className="text-slate-900 font-bold text-xs">!</Text>
+                                </View>
+                            )}
+                            <Feather name="user" color={colors.white} size={24}/>
+                        </TouchableOpacity>
+                    </Link>
+                )}
+
+                { cartQuantityItems > 0 && (
+                    <Link href={'/cart'} asChild>
+                        <TouchableOpacity className="relative" activeOpacity={0.7}>
+                            <View className="bg-lime-300 w-4 h-4 rounded-full items-center justify-center -top-2 z-10 -right-1.5 absolute">
+                                <Text className="text-slate-900 font-bold text-xs">{cartQuantityItems}</Text>
+                            </View>
+                            <Feather name="shopping-bag" color={colors.white} size={24} />
+                        </TouchableOpacity>
+                    </Link>
+                )}
+            </View>
         </View>
     )
 }

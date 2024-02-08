@@ -15,3 +15,17 @@ export function add(products: ProductCartProps[], newProduct: ProductProps) {
 
     return [...products, { ...newProduct, quantity: 1 }]
 }
+
+export function remove(products: ProductCartProps[], product: ProductProps) {
+    const existingProduct = products.find(({ id }) => product.id === id)
+    
+    if (existingProduct && existingProduct.quantity > 1) {
+        return products.map((product) => 
+            product.id === existingProduct.id 
+            ? {...product, quantity: product.quantity - 1} 
+            : product
+        )
+    }
+
+    return products.filter(({ id }) => product.id !== id)
+}
