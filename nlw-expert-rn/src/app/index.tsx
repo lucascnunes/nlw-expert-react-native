@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { View, FlatList, SectionList, Text } from 'react-native'
-
+import { Link } from 'expo-router'
 import { CATEGORIES, MENU } from '@/utils/data/products'
 
 import { Header } from '@/components/header'
@@ -8,7 +8,7 @@ import { CategoryButton } from '@/components/category-button'
 import { Product } from '@/components/product'
 
 export default function Home() {
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState('Lanche do dia')
 
     const sectionListRef = useRef<SectionList>(null)
 
@@ -25,7 +25,7 @@ export default function Home() {
     }
 
     return (
-    <View className="flex-1">
+    <View className="flex-1 pt-8">
         <Header title="Faça seu pedido" cartQuantityItems={5}/>
 
         <FlatList
@@ -44,7 +44,7 @@ export default function Home() {
             keyExtractor={(item) => item.id}
             stickySectionHeadersEnabled={false}
             renderItem={({ item }) => (
-                <Product data={item} />
+                <Link href={`/product/${item.id}`} asChild><Product data={item} /></Link>
             )}
             renderSectionHeader={({ section: { title } }) => (
                 <Text className="text-white text-xl font-heading font-bold mt-4 mb-3">{title}</Text>
