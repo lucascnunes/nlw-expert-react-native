@@ -2,7 +2,7 @@ import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// AsyncStorage.clear();
+// AsyncStorage.clear(); // well it's self explanatory
 
 type UserProps = {
     name: string,
@@ -24,7 +24,7 @@ export const useUserStore = create(persist<StateProps>((set) => ({
         address: '',
     },
 
-    save: (user: UserProps) => 
+    save: (user: UserProps) =>
         set((state) => (
             { ...state,
                 user: {

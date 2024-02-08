@@ -4,7 +4,7 @@ import * as cartInMemory from './helpers/cart-in-memory'
 import { createJSONStorage, persist } from "zustand/middleware"
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// AsyncStorage.clear();
+// AsyncStorage.clear(); // well it's self explanatory
 
 export type ProductCartProps = ProductProps & {
     quantity: number
@@ -19,13 +19,13 @@ type StateProps = {
 
 export const useCartStore = create(persist<StateProps>((set) => ({
     products: [],
-    
-    add: (product: ProductProps) => 
+
+    add: (product: ProductProps) =>
         set((state) => ({
             products: cartInMemory.add(state.products, product),
     })),
 
-    remove: (product: ProductProps) => 
+    remove: (product: ProductProps) =>
         set((state) => ({
             products: cartInMemory.remove(state.products, product),
     })),
@@ -35,4 +35,3 @@ export const useCartStore = create(persist<StateProps>((set) => ({
     name: 'nlw-expert:cart',
     storage: createJSONStorage(() => AsyncStorage)
 }))
-
